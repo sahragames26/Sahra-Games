@@ -481,6 +481,40 @@
     filter: drop-shadow(0 0 6px rgba(236,72,153,0.6));
   }
 
+  /* ============ 6 GAMES GRID: 2 columns x 3 rows (fixed, no scroll) ============ */
+  .grid-games {
+    flex:1;
+    min-height:0;
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    grid-template-rows: repeat(3, minmax(0,1fr));
+    gap: 9px;
+  }
+  .grid-games .game-card { padding: 10px 11px 9px; }
+  .grid-games .card-desc { -webkit-line-clamp:2; margin-bottom:6px; }
+
+  .card-icon.icon-c3 {
+    background: linear-gradient(135deg, #EC4899 0%, #F43F5E 50%, #FB923C 100%);
+    box-shadow: 0 0 16px rgba(244,63,94,0.55), 0 0 32px rgba(251,146,60,0.30);
+  }
+  .card-icon.icon-c4 {
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #C084FC 100%);
+    box-shadow: 0 0 16px rgba(99,102,241,0.55), 0 0 32px rgba(192,132,252,0.35);
+  }
+  .card-icon.icon-c5 {
+    background: linear-gradient(135deg, #F59E0B 0%, #F43F5E 55%, #EC4899 100%);
+    box-shadow: 0 0 16px rgba(245,158,11,0.50), 0 0 32px rgba(236,72,153,0.35);
+  }
+  .card-icon.icon-c6 {
+    background: linear-gradient(135deg, #A855F7 0%, #EC4899 55%, #F43F5E 100%);
+    box-shadow: 0 0 16px rgba(168,85,247,0.55), 0 0 32px rgba(236,72,153,0.35);
+  }
+  .card-icon.sj { font-size:15px; font-weight:900; color:#fff; letter-spacing:0; }
+
+  /* كأنه تطبيق: لا تحديد نص ولا سحب */
+  html, body { -webkit-user-select:none; user-select:none; touch-action:manipulation; }
+  a { -webkit-user-drag:none; -webkit-touch-callout:none; }
+
   /* ================= RESPONSIVE ================= */
 
   @media (min-width: 640px) {
@@ -489,11 +523,6 @@
     .brand-name { font-size:17px; }
     .hero-title { font-size: clamp(20px, 3.2vw, 30px); }
     .hero-sub { font-size:12px; }
-    .grid-playable { flex: 1.15; }
-    .grid-soon {
-      grid-template-columns: repeat(4, 1fr);
-      flex: 1;
-    }
     .card-icon { width:46px; height:46px; font-size:22px; }
     .card-title { font-size: 16px; }
     .card-desc { font-size:11.5px; -webkit-line-clamp:3; }
@@ -506,30 +535,14 @@
   @media (min-width: 960px) {
     .page { padding: 16px 32px; gap: 12px; }
 
-    .grid-wrap {
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 14px;
-      align-items:stretch;
-    }
     .row-label { display:none; }
 
-    .grid-playable {
-      display:contents;
+    .grid-games {
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      grid-template-rows: repeat(2, minmax(0,1fr));
+      gap: 14px;
     }
-    .grid-playable > .game-card:nth-child(1) { grid-column: 1; grid-row: 1; }
-    .grid-playable > .game-card:nth-child(2) { grid-column: 2; grid-row: 1; }
-
-    .grid-soon {
-      display:contents;
-      margin:0;
-    }
-    .grid-soon > .soon-card:nth-child(1) { grid-column: 3; grid-row: 1; }
-    .grid-soon > .soon-card:nth-child(2) { grid-column: 1; grid-row: 2; }
-    .grid-soon > .soon-card:nth-child(3) { grid-column: 2; grid-row: 2; }
-    .grid-soon > .soon-card:nth-child(4) { grid-column: 3; grid-row: 2; }
-
+    .grid-games .game-card { padding: 14px 16px 12px; }
     .hero-title { font-size: 30px; }
     .card-icon { width:50px; height:50px; font-size:24px; }
     .card-title { font-size: 18px; }
@@ -550,6 +563,11 @@
     .soon-text { font-size:11.5px; }
     .soon-dots { margin-top:3px; }
     footer { font-size:9px; }
+  }
+
+  @media (max-height: 740px) {
+    .hero-sub { display:none; }
+    .grid-games .card-desc { -webkit-line-clamp:1; }
   }
 
   @media (max-width: 380px) {
@@ -673,43 +691,63 @@
 
   <!-- GAMES GRID -->
   <main class="grid-wrap">
+    <!-- RTL: أول كارت في كل صف على اليمين، والتاني على الشمال -->
+    <div class="grid-games">
 
-    <!-- TOP ROW: 2 PLAYABLE -->
-    <div class="row-label">
-      <span class="chip">متاح الآن</span>
-      <span class="line"></span>
-    </div>
-
-    <div class="grid grid-playable">
-
-      <!-- Card 1: أكشن الملاعب -->
-      <a
-        href="#"
-        data-game-url="https://game-production-5fe9.up.railway.app/"
-        class="game-card"
-        aria-label="أكشن الملاعب">
-        <div class="card-icon icon-act">⚽</div>
-        <h2 class="card-title">أكشن الملاعب</h2>
-        <p class="card-desc">
-          لعبة كروت استراتيجية لكرة القدم — اجمع تشكيلتك وكن أول من يبني فريقه المثالي.
-        </p>
+      <a href="#" data-game-url="https://seen-geem-sahra.vercel.app/" class="game-card" aria-label="س ج">
+        <div class="card-icon icon-act sj">س ج</div>
+        <h2 class="card-title">س ج</h2>
+        <p class="card-desc">أسئلة وتحديات سريعة — مين يجاوب أسرع ويكسب السهرة؟</p>
         <span class="card-cta">
           العب الآن
           <span class="arrow">←</span>
         </span>
       </a>
 
-      <!-- Card 2: التمثيل -->
-      <a
-        href="#"
-        data-game-url="https://action-almala3b-27.vercel.app/"
-        class="game-card"
-        aria-label="التمثيل">
+      <a href="#" data-game-url="https://acting-sahra.vercel.app/" class="game-card" aria-label="التمثيل">
         <div class="card-icon icon-act2">🎭</div>
         <h2 class="card-title">التمثيل</h2>
-        <p class="card-desc">
-          فريقك يمثل والبقية يخمنون — كلمات من الأنمي والأفلام في سهرة مليانة ضحك.
-        </p>
+        <p class="card-desc">فريقك يمثل والبقية يخمنون — كلمات من الأنمي والأفلام في سهرة مليانة ضحك.</p>
+        <span class="card-cta">
+          العب الآن
+          <span class="arrow">←</span>
+        </span>
+      </a>
+
+      <a href="#" data-game-url="https://action-almala3b-production-9505.up.railway.app/" class="game-card" aria-label="أكشن الملاعب">
+        <div class="card-icon icon-c3">⚽</div>
+        <h2 class="card-title">أكشن الملاعب</h2>
+        <p class="card-desc">لعبة كروت استراتيجية لكرة القدم — اجمع تشكيلتك وابني فريقك المثالي.</p>
+        <span class="card-cta">
+          العب الآن
+          <span class="arrow">←</span>
+        </span>
+      </a>
+
+      <a href="#" data-game-url="https://almazad-production.up.railway.app/" class="game-card" aria-label="المزاد">
+        <div class="card-icon icon-c4">🔨</div>
+        <h2 class="card-title">المزاد</h2>
+        <p class="card-desc">زايد على الأسئلة بفلوسك — اللي يدفع أكتر ويجاوب صح هو الكسبان.</p>
+        <span class="card-cta">
+          العب الآن
+          <span class="arrow">←</span>
+        </span>
+      </a>
+
+      <a href="#" data-game-url="https://3-sare3-production.up.railway.app/" class="game-card" aria-label="على السريع">
+        <div class="card-icon icon-c5">⚡</div>
+        <h2 class="card-title">على السريع</h2>
+        <p class="card-desc">سرعة بديهة وتحدي في ثواني — الأسرع هو اللي يفوز.</p>
+        <span class="card-cta">
+          العب الآن
+          <span class="arrow">←</span>
+        </span>
+      </a>
+
+      <a href="#" data-game-url="https://al-sandok-production-9746.up.railway.app/" class="game-card" aria-label="الصندوق">
+        <div class="card-icon icon-c6">📦</div>
+        <h2 class="card-title">الصندوق</h2>
+        <p class="card-desc">افتح الصندوق وشوف إيه المفاجأة — تحديات مختلفة في كل مرة.</p>
         <span class="card-cta">
           العب الآن
           <span class="arrow">←</span>
@@ -717,41 +755,6 @@
       </a>
 
     </div>
-
-    <!-- BOTTOM ROW: 4 COMING SOON -->
-    <div class="row-label">
-      <span class="chip">قريباً</span>
-      <span class="line"></span>
-    </div>
-
-    <div class="grid grid-soon">
-
-      <div class="soon-card" aria-disabled="true">
-        <div class="lock-badge">🔒</div>
-        <div class="soon-text">قريباً</div>
-        <div class="soon-dots"><span></span><span></span><span></span></div>
-      </div>
-
-      <div class="soon-card" aria-disabled="true">
-        <div class="lock-badge">🔒</div>
-        <div class="soon-text">قريباً</div>
-        <div class="soon-dots"><span></span><span></span><span></span></div>
-      </div>
-
-      <div class="soon-card" aria-disabled="true">
-        <div class="lock-badge">🔒</div>
-        <div class="soon-text">قريباً</div>
-        <div class="soon-dots"><span></span><span></span><span></span></div>
-      </div>
-
-      <div class="soon-card" aria-disabled="true">
-        <div class="lock-badge">🔒</div>
-        <div class="soon-text">قريباً</div>
-        <div class="soon-dots"><span></span><span></span><span></span></div>
-      </div>
-
-    </div>
-
   </main>
 
   <!-- FOOTER -->
