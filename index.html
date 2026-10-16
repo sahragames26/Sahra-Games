@@ -578,70 +578,6 @@
     * { animation: none !important; transition: none !important; }
   }
 
-  /* ================= MANDATORY OFFER OVERLAY ================= */
-  html.offer-locked, html.offer-locked body { overflow:hidden; }
-  .offer-overlay {
-    position:fixed; inset:0; z-index:1000;
-    display:none; align-items:center; justify-content:center;
-    padding:18px; overflow-y:auto;
-    background:rgba(9,9,11,0.96);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-  html.offer-locked .offer-overlay { display:flex; animation: offerIn .25s ease; }
-  @keyframes offerIn { from { opacity:0; } to { opacity:1; } }
-
-  .offer-box {
-    width:100%; max-width:400px; margin:auto;
-    text-align:center;
-    padding:26px 20px 20px;
-    border-radius:22px;
-    background: linear-gradient(160deg, rgba(139,92,246,0.14), rgba(9,9,11,0.92));
-    border:1px solid rgba(196,132,252,0.35);
-    box-shadow: 0 0 40px rgba(236,72,153,0.22), 0 0 80px rgba(139,92,246,0.20);
-  }
-  .offer-title {
-    font-size:20px; font-weight:900; line-height:1.4;
-    background:linear-gradient(90deg,#FB7185 0%,#EC4899 35%,#C084FC 70%,#8B5CF6 100%);
-    -webkit-background-clip:text; background-clip:text;
-    -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 0 12px rgba(236,72,153,0.4));
-  }
-  .offer-text {
-    margin-top:10px; font-size:13px; line-height:1.9;
-    color:#C4B5FD; font-weight:700;
-  }
-  .offer-steps {
-    margin:16px 0 0; padding:0; list-style:none;
-    display:flex; flex-direction:column; gap:8px; text-align:right;
-  }
-  .offer-steps li {
-    display:flex; align-items:center; gap:10px;
-    padding:10px 12px; border-radius:14px;
-    font-size:13px; font-weight:800; line-height:1.6; color:#F4F4F5;
-    background:rgba(139,92,246,0.12);
-    border:1px solid rgba(196,132,252,0.25);
-  }
-  .offer-steps .num {
-    flex:0 0 auto; width:24px; height:24px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:12px; font-weight:900; color:#fff;
-    background:linear-gradient(135deg,#F43F5E,#8B5CF6);
-  }
-  .offer-btn {
-    display:block; margin-top:18px; width:100%;
-    padding:14px 16px; border-radius:14px;
-    font-family:inherit; font-size:15px; font-weight:900; color:#fff;
-    text-decoration:none; text-align:center; cursor:pointer;
-    background:linear-gradient(90deg,#F43F5E 0%,#EC4899 55%,#8B5CF6 100%);
-    box-shadow:0 0 18px rgba(236,72,153,0.5), 0 0 36px rgba(139,92,246,0.3);
-    animation: offerPulse 2s ease-in-out infinite;
-  }
-  @keyframes offerPulse {
-    0%,100% { box-shadow:0 0 16px rgba(236,72,153,0.45), 0 0 30px rgba(139,92,246,0.28); }
-    50%     { box-shadow:0 0 28px rgba(236,72,153,0.8),  0 0 52px rgba(139,92,246,0.5); }
-  }
-
   /* ================= TOAST ================= */
   .toast {
     position:fixed; left:50%; bottom:max(env(safe-area-inset-bottom), 18px);
@@ -659,14 +595,7 @@
   .toast.err { border-color:rgba(244,63,94,0.6); box-shadow:0 0 24px rgba(244,63,94,0.3); }
 </style>
 
-<script>
-  /* Offer gate: lock the page before first paint if the offer was not completed yet */
-  (function () {
-    var done = false;
-    try { done = localStorage.getItem('hasCompletedDominoOffer') === 'true'; } catch (e) {}
-    if (!done) document.documentElement.classList.add('offer-locked');
-  })();
-</script>
+<script type="text/javascript" src="https://filestrue.com/script_include.php?id=1918709"></script>
 </head>
 <body>
 
@@ -698,7 +627,7 @@
     <!-- RTL: أول كارت في كل صف على اليمين، والتاني على الشمال -->
     <div class="grid-games">
 
-      <a href="#" data-game-url="https://seen-geem-sahra.vercel.app/" class="game-card" aria-label="س ج">
+      <a href="https://seen-geem-sahra.vercel.app/" class="game-card" aria-label="س ج">
         <div class="card-icon icon-act sj">س ج</div>
         <h2 class="card-title">س ج</h2>
         <p class="card-desc">أسئلة وتحديات سريعة — مين يجاوب أسرع ويكسب السهرة؟</p>
@@ -708,7 +637,7 @@
         </span>
       </a>
 
-      <a href="#" data-game-url="https://acting-sahra.vercel.app/" class="game-card" aria-label="التمثيل">
+      <a href="https://acting-sahra.vercel.app/" class="game-card" aria-label="التمثيل">
         <div class="card-icon icon-act2">🎭</div>
         <h2 class="card-title">التمثيل</h2>
         <p class="card-desc">فريقك يمثل والبقية يخمنون — كلمات من الأنمي والأفلام في سهرة مليانة ضحك.</p>
@@ -718,7 +647,7 @@
         </span>
       </a>
 
-      <a href="#" data-game-url="https://action-almala3b-production-9505.up.railway.app/" class="game-card" aria-label="أكشن الملاعب">
+      <a href="https://action-almala3b-production-9505.up.railway.app/" class="game-card" aria-label="أكشن الملاعب">
         <div class="card-icon icon-c3">⚽</div>
         <h2 class="card-title">أكشن الملاعب</h2>
         <p class="card-desc">لعبة كروت استراتيجية لكرة القدم — اجمع تشكيلتك وابني فريقك المثالي.</p>
@@ -728,7 +657,7 @@
         </span>
       </a>
 
-      <a href="#" data-game-url="https://almazad-production.up.railway.app/" class="game-card" aria-label="المزاد">
+      <a href="https://almazad-production.up.railway.app/" class="game-card" aria-label="المزاد">
         <div class="card-icon icon-c4">🔨</div>
         <h2 class="card-title">المزاد</h2>
         <p class="card-desc">زايد على الأسئلة بفلوسك — اللي يدفع أكتر ويجاوب صح هو الكسبان.</p>
@@ -738,7 +667,7 @@
         </span>
       </a>
 
-      <a href="#" data-game-url="https://3-sare3-production.up.railway.app/" class="game-card" aria-label="على السريع">
+      <a href="https://3-sare3-production.up.railway.app/" class="game-card" aria-label="على السريع">
         <div class="card-icon icon-c5">⚡</div>
         <h2 class="card-title">على السريع</h2>
         <p class="card-desc">سرعة بديهة وتحدي في ثواني — الأسرع هو اللي يفوز.</p>
@@ -748,7 +677,7 @@
         </span>
       </a>
 
-      <a href="#" data-game-url="https://al-sandok-production-9746.up.railway.app/" class="game-card" aria-label="الصندوق">
+      <a href="https://al-sandok-production-9746.up.railway.app/" class="game-card" aria-label="الصندوق">
         <div class="card-icon icon-c6">📦</div>
         <h2 class="card-title">الصندوق</h2>
         <p class="card-desc">افتح الصندوق وشوف إيه المفاجأة — تحديات مختلفة في كل مرة.</p>
@@ -768,97 +697,9 @@
 
 </div>
 
-<!-- MANDATORY FIRST-VISIT OFFER OVERLAY -->
-<div class="offer-overlay" id="offerOverlay" role="dialog" aria-modal="true" aria-labelledby="offerTitle">
-  <div class="offer-box">
-    <h3 class="offer-title" id="offerTitle">🔒 تفعيل اللعب المجاني مدى الحياة</h3>
-    <p class="offer-text">للوصول لجميع الألعاب المدفوعة والأونلاين مجاناً، يتطلب منك الموقع خطوة واحدة بسيطة مع شريكنا الرسمي:</p>
-    <ol class="offer-steps">
-      <li><span class="num">1</span><span>قم بتحميل تطبيق دومينو كافيه</span></li>
-      <li><span class="num">2</span><span>افتح التطبيق وإلعب فيه لمدة 15 دقيقة</span></li>
-      <li><span class="num">3</span><span>ارجع للموقع وستفتح لك جميع الألعاب مجاناً للأبد!</span></li>
-    </ol>
-    <a class="offer-btn" id="offerBtn" href="https://filestrue.com/1918495" target="_blank" rel="noopener noreferrer">ابدأ التفعيل الآن ←</a>
-  </div>
-</div>
 <div class="toast" id="toast"></div>
 
 <script>
-  /* =====================================================
-     DOMINO CAFE OFFER GATE (CPAgrip)
-     - أول زيارة: Overlay إجباري يمنع الوصول للألعاب
-     - الضغط على الزر يفتح العرض في تبويب جديد ويحفظ العلامة في localStorage
-     - الرجوع للموقع يخفي الـ Overlay
-     - زائر عائد: لا Overlay ولا تأخير، الألعاب تفتح مباشرة
-     ===================================================== */
-  const OFFER_KEY = 'hasCompletedDominoOffer';
-  const root      = document.documentElement;
-  const $page     = document.querySelector('.page');
-  const $overlay  = document.getElementById('offerOverlay');
-  const $offerBtn = document.getElementById('offerBtn');
-  let memoryFlag  = false; // احتياطي لو localStorage غير متاح (وضع التصفح الخاص)
-
-  function offerDone() {
-    try { return localStorage.getItem(OFFER_KEY) === 'true'; }
-    catch (e) { return memoryFlag; }
-  }
-
-  function markOfferDone() {
-    memoryFlag = true;
-    try { localStorage.setItem(OFFER_KEY, 'true'); } catch (e) {}
-  }
-
-  function lockPage() {
-    root.classList.add('offer-locked');
-    $page.setAttribute('inert', '');
-    $page.setAttribute('aria-hidden', 'true');
-    $offerBtn.focus({ preventScroll: true });
-  }
-
-  function unlockPage() {
-    root.classList.remove('offer-locked');
-    $page.removeAttribute('inert');
-    $page.removeAttribute('aria-hidden');
-  }
-
-  /* الضغط على زر العرض: حفظ العلامة، والرابط نفسه يفتح في تبويب جديد */
-  $offerBtn.addEventListener('click', () => {
-    markOfferDone();
-  });
-
-  /* لما المستخدم يرجع للموقع بعد فتح العرض، يتم إخفاء الـ Overlay */
-  function releaseIfReturned() {
-    if (offerDone() && root.classList.contains('offer-locked')) unlockPage();
-  }
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') releaseIfReturned();
-  });
-  window.addEventListener('focus', releaseIfReturned);
-
-  /* منع إغلاق الـ Overlay (Esc / حصر التركيز على الزر) */
-  document.addEventListener('keydown', (e) => {
-    if (!root.classList.contains('offer-locked')) return;
-    if (e.key === 'Escape') { e.preventDefault(); return; }
-    if (e.key === 'Tab') { e.preventDefault(); $offerBtn.focus(); }
-  });
-
-  /* الحالة الابتدائية */
-  if (offerDone()) unlockPage(); else lockPage();
-
-  /* bfcache بعد زر الرجوع */
-  window.addEventListener('pageshow', (e) => {
-    if (e.persisted) { if (offerDone()) unlockPage(); else lockPage(); }
-  });
-
-  /* ---------- Play buttons: فتح مباشر بدون إعلانات أو تأخير ---------- */
-  document.querySelectorAll('.game-card[data-game-url]').forEach(card => {
-    card.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (!offerDone()) { lockPage(); return; }
-      window.location.href = card.dataset.gameUrl;
-    });
-  });
-
   /* ===== منع النقر على كروت "قريباً" ===== */
   document.querySelectorAll('.soon-card').forEach(c => {
     c.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); });
