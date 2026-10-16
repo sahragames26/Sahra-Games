@@ -578,20 +578,21 @@
     * { animation: none !important; transition: none !important; }
   }
 
-  /* ================= GATE MODAL ================= */
-  .gate-overlay {
-    position:fixed; inset:0; z-index:50;
+  /* ================= MANDATORY OFFER OVERLAY ================= */
+  html.offer-locked, html.offer-locked body { overflow:hidden; }
+  .offer-overlay {
+    position:fixed; inset:0; z-index:1000;
     display:none; align-items:center; justify-content:center;
-    padding:18px;
-    background:rgba(9,9,11,0.78);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    padding:18px; overflow-y:auto;
+    background:rgba(9,9,11,0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
-  .gate-overlay.show { display:flex; animation: gateIn .25s ease; }
-  @keyframes gateIn { from { opacity:0; } to { opacity:1; } }
+  html.offer-locked .offer-overlay { display:flex; animation: offerIn .25s ease; }
+  @keyframes offerIn { from { opacity:0; } to { opacity:1; } }
 
-  .gate-box {
-    width:100%; max-width:380px;
+  .offer-box {
+    width:100%; max-width:400px; margin:auto;
     text-align:center;
     padding:26px 20px 20px;
     border-radius:22px;
@@ -599,59 +600,47 @@
     border:1px solid rgba(196,132,252,0.35);
     box-shadow: 0 0 40px rgba(236,72,153,0.22), 0 0 80px rgba(139,92,246,0.20);
   }
-  .gate-icon {
-    width:56px; height:56px; margin:0 auto 12px;
-    border-radius:16px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:26px;
-    background:linear-gradient(135deg,#F43F5E 0%,#EC4899 45%,#8B5CF6 100%);
-    box-shadow:0 0 20px rgba(236,72,153,0.55), 0 0 40px rgba(139,92,246,0.35);
-  }
-  .gate-title {
-    font-size:19px; font-weight:900; line-height:1.3;
+  .offer-title {
+    font-size:20px; font-weight:900; line-height:1.4;
     background:linear-gradient(90deg,#FB7185 0%,#EC4899 35%,#C084FC 70%,#8B5CF6 100%);
     -webkit-background-clip:text; background-clip:text;
     -webkit-text-fill-color:transparent;
     filter:drop-shadow(0 0 12px rgba(236,72,153,0.4));
   }
-  .gate-text {
-    margin-top:8px; font-size:12.5px; line-height:1.8;
+  .offer-text {
+    margin-top:10px; font-size:13px; line-height:1.9;
     color:#C4B5FD; font-weight:700;
   }
-  .gate-steps {
-    margin:14px 0 4px; display:flex; justify-content:center; gap:6px;
-    font-size:10.5px; font-weight:700; color:#A1A1AA;
+  .offer-steps {
+    margin:16px 0 0; padding:0; list-style:none;
+    display:flex; flex-direction:column; gap:8px; text-align:right;
   }
-  .gate-steps span {
-    padding:4px 9px; border-radius:12px;
+  .offer-steps li {
+    display:flex; align-items:center; gap:10px;
+    padding:10px 12px; border-radius:14px;
+    font-size:13px; font-weight:800; line-height:1.6; color:#F4F4F5;
     background:rgba(139,92,246,0.12);
     border:1px solid rgba(196,132,252,0.25);
   }
-  .gate-steps span b { color:#EC4899; }
-  .gate-go {
-    margin-top:14px; width:100%;
-    padding:13px 16px; border:none; border-radius:14px;
-    font-family:inherit; font-size:15px; font-weight:900; color:#fff; cursor:pointer;
+  .offer-steps .num {
+    flex:0 0 auto; width:24px; height:24px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:900; color:#fff;
+    background:linear-gradient(135deg,#F43F5E,#8B5CF6);
+  }
+  .offer-btn {
+    display:block; margin-top:18px; width:100%;
+    padding:14px 16px; border-radius:14px;
+    font-family:inherit; font-size:15px; font-weight:900; color:#fff;
+    text-decoration:none; text-align:center; cursor:pointer;
     background:linear-gradient(90deg,#F43F5E 0%,#EC4899 55%,#8B5CF6 100%);
     box-shadow:0 0 18px rgba(236,72,153,0.5), 0 0 36px rgba(139,92,246,0.3);
-    animation: goPulse 2s ease-in-out infinite;
+    animation: offerPulse 2s ease-in-out infinite;
   }
-  @keyframes goPulse {
+  @keyframes offerPulse {
     0%,100% { box-shadow:0 0 16px rgba(236,72,153,0.45), 0 0 30px rgba(139,92,246,0.28); }
     50%     { box-shadow:0 0 28px rgba(236,72,153,0.8),  0 0 52px rgba(139,92,246,0.5); }
   }
-  .gate-count { margin-top:10px; font-size:11px; color:#A1A1AA; min-height:16px; }
-  .gate-cancel {
-    margin-top:4px; background:none; border:none; cursor:pointer;
-    font-family:inherit; font-size:11px; color:#71717A; text-decoration:underline;
-  }
-
-  .gate-number {
-    margin:14px auto 0; font-family:'Orbitron',sans-serif; font-size:48px; font-weight:900; line-height:1;
-    background:linear-gradient(90deg,#FB7185,#EC4899,#8B5CF6);
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-  }
-  .gate-go:disabled { opacity:.5; cursor:not-allowed; animation:none; }
 
   /* ================= TOAST ================= */
   .toast {
@@ -670,6 +659,14 @@
   .toast.err { border-color:rgba(244,63,94,0.6); box-shadow:0 0 24px rgba(244,63,94,0.3); }
 </style>
 
+<script>
+  /* Offer gate: lock the page before first paint if the offer was not completed yet */
+  (function () {
+    var done = false;
+    try { done = localStorage.getItem('hasCompletedDominoOffer') === 'true'; } catch (e) {}
+    if (!done) document.documentElement.classList.add('offer-locked');
+  })();
+</script>
 </head>
 <body>
 
@@ -771,89 +768,96 @@
 
 </div>
 
-<!-- COUNTDOWN MODAL -->
-<div class="gate-overlay" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
-  <div class="gate-box">
-    <div class="gate-icon">🎮</div>
-    <h3 class="gate-title" id="gateTitle">جاري تجهيز اللعبة...</h3>
-    <p class="gate-text" id="gateText">سيتم تحويلك للعبة تلقائياً بعد انتهاء العد التنازلي.</p>
-    <div class="gate-number" id="gateNumber">5</div>
-    <div class="gate-count" id="gateCount">جاري تجهيز اللعبة... 5 ثوانٍ</div>
-    <button class="gate-go" id="gateGo" type="button" disabled>انتظر...</button>
-    <button class="gate-cancel" id="gateCancel" type="button">إلغاء</button>
+<!-- MANDATORY FIRST-VISIT OFFER OVERLAY -->
+<div class="offer-overlay" id="offerOverlay" role="dialog" aria-modal="true" aria-labelledby="offerTitle">
+  <div class="offer-box">
+    <h3 class="offer-title" id="offerTitle">🔒 تفعيل اللعب المجاني مدى الحياة</h3>
+    <p class="offer-text">للوصول لجميع الألعاب المدفوعة والأونلاين مجاناً، يتطلب منك الموقع خطوة واحدة بسيطة مع شريكنا الرسمي:</p>
+    <ol class="offer-steps">
+      <li><span class="num">1</span><span>قم بتحميل تطبيق دومينو كافيه</span></li>
+      <li><span class="num">2</span><span>افتح التطبيق وإلعب فيه لمدة 15 دقيقة</span></li>
+      <li><span class="num">3</span><span>ارجع للموقع وستفتح لك جميع الألعاب مجاناً للأبد!</span></li>
+    </ol>
+    <a class="offer-btn" id="offerBtn" href="https://filestrue.com/1918495" target="_blank" rel="noopener noreferrer">ابدأ التفعيل الآن ←</a>
   </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
   /* =====================================================
-     PLAY NOW FLOW
-     1) فتح الـ Link Locker في تبويب جديد
-     2) عداد تنازلي 5 ثوانٍ في هذه الصفحة
-     3) تحويل تلقائي لرابط اللعبة (أو زر المتابعة)
+     DOMINO CAFE OFFER GATE (CPAgrip)
+     - أول زيارة: Overlay إجباري يمنع الوصول للألعاب
+     - الضغط على الزر يفتح العرض في تبويب جديد ويحفظ العلامة في localStorage
+     - الرجوع للموقع يخفي الـ Overlay
+     - زائر عائد: لا Overlay ولا تأخير، الألعاب تفتح مباشرة
      ===================================================== */
-  const CONFIG = {
-    LOCKER_URL: 'https://www.fastrsrvr.com/view.php?id=5547151&pub=3367382',
-    COUNTDOWN: 5
-  };
+  const OFFER_KEY = 'hasCompletedDominoOffer';
+  const root      = document.documentElement;
+  const $page     = document.querySelector('.page');
+  const $overlay  = document.getElementById('offerOverlay');
+  const $offerBtn = document.getElementById('offerBtn');
+  let memoryFlag  = false; // احتياطي لو localStorage غير متاح (وضع التصفح الخاص)
 
-  const $gate   = document.getElementById('gate');
-  const $count  = document.getElementById('gateCount');
-  const $number = document.getElementById('gateNumber');
-  const $go     = document.getElementById('gateGo');
-  let timer = null, targetUrl = null;
-
-  function goToGame() {
-    clearInterval(timer);
-    if (targetUrl) window.location.href = targetUrl;
+  function offerDone() {
+    try { return localStorage.getItem(OFFER_KEY) === 'true'; }
+    catch (e) { return memoryFlag; }
   }
 
-  function startCountdown(gameUrl) {
-    targetUrl = gameUrl;
-    let n = CONFIG.COUNTDOWN;
-    $gate.classList.add('show');
-    $go.disabled = true;
-    $go.textContent = 'انتظر...';
-    $number.textContent = n;
-    $count.textContent = 'جاري تجهيز اللعبة... ' + n + ' ثوانٍ';
-    clearInterval(timer);
-    timer = setInterval(() => {
-      n--;
-      if (n <= 0) {
-        clearInterval(timer);
-        $number.textContent = '0';
-        $count.textContent = 'تم تجهيز اللعبة! جاري التحويل...';
-        $go.disabled = false;
-        $go.textContent = 'العب الآن ←';
-        goToGame();
-        return;
-      }
-      $number.textContent = n;
-      $count.textContent = 'جاري تجهيز اللعبة... ' + n + ' ثوانٍ';
-    }, 1000);
+  function markOfferDone() {
+    memoryFlag = true;
+    try { localStorage.setItem(OFFER_KEY, 'true'); } catch (e) {}
   }
 
-  function hideGate() {
-    clearInterval(timer);
-    targetUrl = null;
-    $gate.classList.remove('show');
+  function lockPage() {
+    root.classList.add('offer-locked');
+    $page.setAttribute('inert', '');
+    $page.setAttribute('aria-hidden', 'true');
+    $offerBtn.focus({ preventScroll: true });
   }
 
-  $go.addEventListener('click', goToGame);
-  document.getElementById('gateCancel').addEventListener('click', hideGate);
+  function unlockPage() {
+    root.classList.remove('offer-locked');
+    $page.removeAttribute('inert');
+    $page.removeAttribute('aria-hidden');
+  }
 
-  /* ---------- Play buttons (كل كارت عليه data-game-url) ---------- */
+  /* الضغط على زر العرض: حفظ العلامة، والرابط نفسه يفتح في تبويب جديد */
+  $offerBtn.addEventListener('click', () => {
+    markOfferDone();
+  });
+
+  /* لما المستخدم يرجع للموقع بعد فتح العرض، يتم إخفاء الـ Overlay */
+  function releaseIfReturned() {
+    if (offerDone() && root.classList.contains('offer-locked')) unlockPage();
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') releaseIfReturned();
+  });
+  window.addEventListener('focus', releaseIfReturned);
+
+  /* منع إغلاق الـ Overlay (Esc / حصر التركيز على الزر) */
+  document.addEventListener('keydown', (e) => {
+    if (!root.classList.contains('offer-locked')) return;
+    if (e.key === 'Escape') { e.preventDefault(); return; }
+    if (e.key === 'Tab') { e.preventDefault(); $offerBtn.focus(); }
+  });
+
+  /* الحالة الابتدائية */
+  if (offerDone()) unlockPage(); else lockPage();
+
+  /* bfcache بعد زر الرجوع */
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) { if (offerDone()) unlockPage(); else lockPage(); }
+  });
+
+  /* ---------- Play buttons: فتح مباشر بدون إعلانات أو تأخير ---------- */
   document.querySelectorAll('.game-card[data-game-url]').forEach(card => {
     card.addEventListener('click', (e) => {
       e.preventDefault();
-      // لازم يتفتح داخل حدث الضغط مباشرة عشان المتصفح ما يحجبه
-      window.open(CONFIG.LOCKER_URL, '_blank', 'noopener,noreferrer');
-      startCountdown(card.dataset.gameUrl);
+      if (!offerDone()) { lockPage(); return; }
+      window.location.href = card.dataset.gameUrl;
     });
   });
-
-  // لو الصفحة اتفتحت من bfcache بعد زر الرجوع
-  window.addEventListener('pageshow', (e) => { if (e.persisted) hideGate(); });
 
   /* ===== منع النقر على كروت "قريباً" ===== */
   document.querySelectorAll('.soon-card').forEach(c => {
