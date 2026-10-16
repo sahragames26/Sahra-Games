@@ -646,6 +646,13 @@
     font-family:inherit; font-size:11px; color:#71717A; text-decoration:underline;
   }
 
+  .gate-number {
+    margin:14px auto 0; font-family:'Orbitron',sans-serif; font-size:48px; font-weight:900; line-height:1;
+    background:linear-gradient(90deg,#FB7185,#EC4899,#8B5CF6);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .gate-go:disabled { opacity:.5; cursor:not-allowed; animation:none; }
+
   /* ================= TOAST ================= */
   .toast {
     position:fixed; left:50%; bottom:max(env(safe-area-inset-bottom), 18px);
@@ -764,22 +771,15 @@
 
 </div>
 
-<!-- GATE MODAL -->
+<!-- COUNTDOWN MODAL -->
 <div class="gate-overlay" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
   <div class="gate-box">
-    <div class="gate-icon">🔓</div>
-    <h3 class="gate-title" id="gateTitle">خطوة واحدة لفتح اللعبة</h3>
-    <p class="gate-text">
-      أكمل عرضاً سريعاً واحداً وهتتفتح لك كل الألعاب مجاناً لمدة ساعة كاملة.
-      بعد إتمام العرض هترجع لهنا تلقائياً.
-    </p>
-    <div class="gate-steps">
-      <span><b>1</b> أكمل العرض</span>
-      <span><b>2</b> ارجع للموقع</span>
-      <span><b>3</b> العب</span>
-    </div>
-    <button class="gate-go" id="gateGo" type="button">ابدأ الآن ←</button>
-    <div class="gate-count" id="gateCount"></div>
+    <div class="gate-icon">🎮</div>
+    <h3 class="gate-title" id="gateTitle">جاري تجهيز اللعبة...</h3>
+    <p class="gate-text" id="gateText">سيتم تحويلك للعبة تلقائياً بعد انتهاء العد التنازلي.</p>
+    <div class="gate-number" id="gateNumber">5</div>
+    <div class="gate-count" id="gateCount">جاري تجهيز اللعبة... 5 ثوانٍ</div>
+    <button class="gate-go" id="gateGo" type="button" disabled>انتظر...</button>
     <button class="gate-cancel" id="gateCancel" type="button">إلغاء</button>
   </div>
 </div>
@@ -787,159 +787,73 @@
 
 <script>
   /* =====================================================
-     CPA GATING SYSTEM
-     مهم: في CPAGrip خلي الـ Locked URL يكون:
-     https://sahra-games26.vercel.app/?offer=done
+     PLAY NOW FLOW
+     1) فتح الـ Link Locker في تبويب جديد
+     2) عداد تنازلي 5 ثوانٍ في هذه الصفحة
+     3) تحويل تلقائي لرابط اللعبة (أو زر المتابعة)
      ===================================================== */
   const CONFIG = {
-    CPA_URL: 'https://filestrue.com/1918495', // رابط العرض المباشر
-    RETURN_PARAM: 'offer',                    // اسم بارامتر العودة
-    RETURN_VALUE: 'done',                     // قيمة بارامتر العودة
-    ACCESS_MS: 60 * 60 * 1000,                // مدة السماح: ساعة
-    MIN_OFFER_MS: 20 * 1000,                  // أقل وقت منطقي لإكمال العرض
-    REDIRECT_DELAY: 3                         // ثواني قبل التحويل التلقائي
+    LOCKER_URL: 'https://www.fastrsrvr.com/view.php?id=5547151&pub=3367382',
+    COUNTDOWN: 5
   };
 
-  const K = { done: 'offerCompleted', time: 'completionTime', start: 'offerStarted' };
+  const $gate   = document.getElementById('gate');
+  const $count  = document.getElementById('gateCount');
+  const $number = document.getElementById('gateNumber');
+  const $go     = document.getElementById('gateGo');
+  let timer = null, targetUrl = null;
 
-  /* ---------- Storage helpers ---------- */
-  function ls(fn, fallback) { try { return fn(); } catch (e) { return fallback; } }
-
-  function clearAccess() {
-    ls(() => {
-      localStorage.removeItem(K.done);
-      localStorage.removeItem(K.time);
-    });
-  }
-
-  function remainingMs() {
-    const done = ls(() => localStorage.getItem(K.done), null);
-    const time = Number(ls(() => localStorage.getItem(K.time), 0));
-    if (done !== 'true' || !time) return 0;
-    const left = CONFIG.ACCESS_MS - (Date.now() - time);
-    if (left <= 0) { clearAccess(); return 0; }
-    return left;
-  }
-
-  function hasAccess() { return remainingMs() > 0; }
-
-  function grantAccess() {
-    ls(() => {
-      localStorage.setItem(K.done, 'true');
-      localStorage.setItem(K.time, String(Date.now()));
-      localStorage.removeItem(K.start);
-    });
-  }
-
-  /* ---------- UI helpers ---------- */
-  const $gate = document.getElementById('gate');
-  const $count = document.getElementById('gateCount');
-  const $toast = document.getElementById('toast');
-  const $chip = document.getElementById('chipText');
-  let timer = null, toastTimer = null;
-
-  function toast(msg, type) {
-    $toast.textContent = msg;
-    $toast.className = 'toast show ' + (type || '');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { $toast.className = 'toast ' + (type || ''); }, 4000);
-  }
-
-  function updateChip() {
-    const left = remainingMs();
-    if (left > 0) {
-      $chip.textContent = 'مفعّل · باقي ' + Math.ceil(left / 60000) + ' دقيقة';
-    } else {
-      $chip.textContent = 'متاح الآن';
-    }
-  }
-
-  function updateButtons() {
-    const open = hasAccess();
-    document.querySelectorAll('.game-card .card-cta').forEach(btn => {
-      const arrow = '<span class="arrow">←</span>';
-      btn.innerHTML = (open ? 'العب الآن ' : '🔓 افتح اللعبة ') + arrow;
-    });
-  }
-
-  /* ---------- Gate flow ---------- */
-  function startOffer() {
+  function goToGame() {
     clearInterval(timer);
-    ls(() => localStorage.setItem(K.start, String(Date.now())));
-    window.location.href = CONFIG.CPA_URL;
+    if (targetUrl) window.location.href = targetUrl;
   }
 
-  function showGate() {
+  function startCountdown(gameUrl) {
+    targetUrl = gameUrl;
+    let n = CONFIG.COUNTDOWN;
     $gate.classList.add('show');
-    let n = CONFIG.REDIRECT_DELAY;
-    $count.textContent = 'تحويل تلقائي خلال ' + n + ' ثواني...';
+    $go.disabled = true;
+    $go.textContent = 'انتظر...';
+    $number.textContent = n;
+    $count.textContent = 'جاري تجهيز اللعبة... ' + n + ' ثوانٍ';
     clearInterval(timer);
     timer = setInterval(() => {
       n--;
-      if (n <= 0) { startOffer(); return; }
-      $count.textContent = 'تحويل تلقائي خلال ' + n + ' ثواني...';
+      if (n <= 0) {
+        clearInterval(timer);
+        $number.textContent = '0';
+        $count.textContent = 'تم تجهيز اللعبة! جاري التحويل...';
+        $go.disabled = false;
+        $go.textContent = 'العب الآن ←';
+        goToGame();
+        return;
+      }
+      $number.textContent = n;
+      $count.textContent = 'جاري تجهيز اللعبة... ' + n + ' ثوانٍ';
     }, 1000);
   }
 
   function hideGate() {
     clearInterval(timer);
+    targetUrl = null;
     $gate.classList.remove('show');
-    $count.textContent = '';
   }
 
-  document.getElementById('gateGo').addEventListener('click', startOffer);
+  $go.addEventListener('click', goToGame);
   document.getElementById('gateCancel').addEventListener('click', hideGate);
 
   /* ---------- Play buttons (كل كارت عليه data-game-url) ---------- */
   document.querySelectorAll('.game-card[data-game-url]').forEach(card => {
     card.addEventListener('click', (e) => {
       e.preventDefault();
-      if (hasAccess()) {
-        window.open(card.dataset.gameUrl, '_blank', 'noopener,noreferrer');
-      } else {
-        showGate();
-      }
+      // لازم يتفتح داخل حدث الضغط مباشرة عشان المتصفح ما يحجبه
+      window.open(CONFIG.LOCKER_URL, '_blank', 'noopener,noreferrer');
+      startCountdown(card.dataset.gameUrl);
     });
   });
 
-  /* ---------- العودة من العرض ---------- */
-  function handleReturn() {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get(CONFIG.RETURN_PARAM) !== CONFIG.RETURN_VALUE) return;
-
-    const started = Number(ls(() => localStorage.getItem(K.start), 0));
-    const elapsed = Date.now() - started;
-
-    // نظّف الرابط من البارامتر
-    history.replaceState(null, '', window.location.pathname + window.location.hash);
-
-    if (started && elapsed >= CONFIG.MIN_OFFER_MS) {
-      grantAccess();
-      toast('✅ تم التفعيل! اضغط على أي لعبة وابدأ اللعب لمدة ساعة', 'ok');
-    } else {
-      ls(() => localStorage.removeItem(K.start));
-      toast('⚠️ لم يتم اكتشاف إكمال العرض، حاول مرة أخرى', 'err');
-    }
-  }
-
-  /* ---------- Init ---------- */
-  handleReturn();
-  updateButtons();
-  updateChip();
-
-  // فحص الانتهاء كل 20 ثانية + عند الرجوع للتبويب
-  function tick() {
-    const before = $chip.textContent;
-    updateChip();
-    updateButtons();
-    if (before.indexOf('مفعّل') === 0 && !hasAccess()) {
-      toast('⏳ انتهت مدة التفعيل، أكمل العرض لفتح الألعاب من جديد', 'err');
-    }
-  }
-  setInterval(tick, 20000);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
   // لو الصفحة اتفتحت من bfcache بعد زر الرجوع
-  window.addEventListener('pageshow', (e) => { if (e.persisted) { hideGate(); tick(); } });
+  window.addEventListener('pageshow', (e) => { if (e.persisted) hideGate(); });
 
   /* ===== منع النقر على كروت "قريباً" ===== */
   document.querySelectorAll('.soon-card').forEach(c => {
